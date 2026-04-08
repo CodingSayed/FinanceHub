@@ -16,3 +16,11 @@ The current implementation includes:
 - a Python ingestion entry point
 - CSV reading
 - PostgreSQL local setup via Docker
+
+## Implemented in Sprint 1.1
+
+The ingestion flow currently supports:
+- reading CSV input
+- mapping rows to a raw transaction contract
+- normalizing rows into a standard transaction record
+- validating normalized transactions

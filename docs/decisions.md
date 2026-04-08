@@ -27,3 +27,12 @@ PostgreSQL was chosen because it:
 - is strong for relational and analytical workloads
 - works well in containerized local development
 - is highly relevant for portfolio projects
+
+## Why separate raw and normalized transaction models?
+
+A distinction was made between raw input rows and normalized transaction records to keep the ingestion pipeline explicit and maintainable.
+
+This makes it easier to:
+- support multiple bank CSV formats later
+- isolate parsing and normalization concerns
+- apply validation after standardization
