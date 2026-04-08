@@ -17,3 +17,13 @@ FinanceHub is a hybrid system consisting of:
 ## Current Status
 
 Sprint 0 focuses on project setup, local development tooling, and the technical foundation.
+
+## Implemented in Sprint 1.3
+
+The ingestion layer now separates:
+
+- batch metadata
+- ingestion execution
+- ingestion result reporting
+
+This improves maintainability and prepares the pipeline for future database persistence.

@@ -13,6 +13,7 @@
 ## Current Status
 
 The current implementation includes:
+
 - a Python ingestion entry point
 - CSV reading
 - PostgreSQL local setup via Docker
@@ -20,17 +21,28 @@ The current implementation includes:
 ## Implemented in Sprint 1.1
 
 The ingestion flow currently supports:
+
 - reading CSV input
 - mapping rows to a raw transaction contract
 - normalizing rows into a standard transaction record
 - validating normalized transactions
 
-
 ## Implemented in Sprint 1.2
 
 The ingestion flow now supports:
+
 - multiple date input formats
 - multiple decimal amount formats
 - row-level normalization error handling
 - row-level validation issue reporting
 - explicit data quality issue tracking
+
+## Implemented in Sprint 1.3
+
+The ingestion process now models:
+
+- an import batch
+- a pipeline execution step
+- an ingestion result summary
+
+This makes each ingestion run easier to track and reason about.
