@@ -24,3 +24,13 @@ The ingestion flow currently supports:
 - mapping rows to a raw transaction contract
 - normalizing rows into a standard transaction record
 - validating normalized transactions
+
+
+## Implemented in Sprint 1.2
+
+The ingestion flow now supports:
+- multiple date input formats
+- multiple decimal amount formats
+- row-level normalization error handling
+- row-level validation issue reporting
+- explicit data quality issue tracking

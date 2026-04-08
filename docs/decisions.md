@@ -36,3 +36,12 @@ This makes it easier to:
 - support multiple bank CSV formats later
 - isolate parsing and normalization concerns
 - apply validation after standardization
+
+
+## Why track data quality issues explicitly?
+
+Data quality issues are modeled explicitly so the ingestion process can:
+- continue processing valid rows
+- surface invalid rows in a structured way
+- support future import batch reporting
+- make the ETL pipeline easier to debug and extend
