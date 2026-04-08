@@ -7,15 +7,24 @@ FinanceHub is a hybrid .NET + Python personal finance analytics platform.
 - ASP.NET Core Web API
 - ASP.NET Core Razor Pages
 - Python (ETL / ingestion)
-- PostgreSQL (planned)
-- Docker (planned)
+- PostgreSQL
+- Docker
 
 ## Project Structure
 
-- `src/FinanceHub.API` - Backend API
-- `src/FinanceHub.Ui` - Frontend (Razor Pages)
-- `src/FinanceHub.Ingestion` - Python ETL (to be added)
+- `src/FinanceHub.API` - backend API
+- `src/FinanceHub.Ui` - frontend application
+- `src/FinanceHub.Ingestion` - Python ingestion layer
+- `docs` - project documentation
+- `sample-data` - local sample input files
+
+## Documentation
+
+- `docs/architecture.md`
+- `docs/data-flow.md`
+- `docs/decisions.md`
+- `docs/database.md`
 
 ## Status
 
-Project setup phase (Sprint 0)
+ Sprint 0 — foundation and setup in progress
