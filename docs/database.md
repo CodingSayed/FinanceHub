@@ -22,3 +22,13 @@ Analytics-oriented views or summary tables may be added later for:
 - monthly spend summaries
 - budget versus actual comparisons
 - category trend analysis
+
+## Implemented in Sprint 2.1
+
+The ingestion pipeline now persists:
+
+- import batches
+- normalized transactions
+- data quality issues
+
+All data is stored in PostgreSQL using raw SQL inserts.
