@@ -27,3 +27,13 @@ The ingestion layer now separates:
 - ingestion result reporting
 
 This improves maintainability and prepares the pipeline for future database persistence.
+
+## Implemented in Sprint 2.2
+
+The API layer now reads transaction data from PostgreSQL.
+
+This connects:
+
+- Python ingestion layer
+- database storage
+- backend API
