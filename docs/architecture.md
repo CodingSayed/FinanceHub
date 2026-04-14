@@ -37,3 +37,14 @@ This connects:
 - Python ingestion layer
 - database storage
 - backend API
+
+## Implemented in Sprint 2.3
+
+The UI layer now consumes transaction data through the backend API.
+
+This completes the first end-to-end path across:
+
+- ingestion
+- database storage
+- API access
+- frontend rendering

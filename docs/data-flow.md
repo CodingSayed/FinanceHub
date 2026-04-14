@@ -46,3 +46,12 @@ The ingestion process now models:
 - an ingestion result summary
 
 This makes each ingestion run easier to track and reason about.
+
+## Implemented in Sprint 2.3
+
+The application now supports the first full end-to-end user-facing flow:
+
+1. CSV input is ingested in Python
+2. normalized data is stored in PostgreSQL
+3. the ASP.NET Core API exposes transaction data
+4. the Razor Pages UI renders transactions in a table
