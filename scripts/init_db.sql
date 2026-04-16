@@ -23,3 +23,6 @@ CREATE TABLE IF NOT EXISTS data_quality_issues (
     message TEXT NOT NULL,
     batch_id INTEGER REFERENCES import_batches(id)
 );
+
+ALTER TABLE transactions
+ADD COLUMN IF NOT EXISTS category TEXT;

@@ -65,3 +65,13 @@ The API now provides financial summaries:
 - net balance
 
 The UI displays these insights above the transaction list.
+
+## Implemented in Sprint 3.1
+
+Transactions are now categorized during ingestion using rule-based logic.
+
+This enables:
+
+- spend analysis
+- grouping by category
+- future ML-based categorization

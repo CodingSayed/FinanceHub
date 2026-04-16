@@ -3,6 +3,7 @@ from decimal import Decimal, InvalidOperation
 
 from financehub_ingestion.models.raw_transaction_row import RawTransactionRow
 from financehub_ingestion.models.transaction_record import TransactionRecord
+from financehub_ingestion.categorizers.simple_categorizer import categorize
 
 
 SUPPORTED_DATE_FORMATS = [
@@ -30,13 +31,15 @@ def normalize_transaction_row(raw_row: RawTransactionRow, source: str) -> Transa
     """
     transaction_date = _parse_date(raw_row.date)
     amount = _parse_amount(raw_row.amount)
+    category = categorize(raw_row.description)
 
     return TransactionRecord(
         transaction_date=transaction_date,
         description=raw_row.description.strip(),
         amount=amount,
         currency=SUPPORTED_CURRENCY,
-        source=source
+        source=source,
+        category=category
     )
 
 

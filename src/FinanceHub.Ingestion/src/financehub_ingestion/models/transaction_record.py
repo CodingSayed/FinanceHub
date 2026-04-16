@@ -14,3 +14,4 @@ class TransactionRecord(BaseModel):
     amount: Decimal
     currency: str
     source: str
+    category: str

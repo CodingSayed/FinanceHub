@@ -24,17 +24,20 @@ def save_transactions(connection, batch_id: int, records):
         execute_batch(
             cursor,
             """
-            INSERT INTO transactions (transaction_date, description, amount, currency, source, batch_id)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO transactions (transaction_date, description, amount, currency, source, category, batch_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             """,
             [
                 (
-                    r.transaction_date,
-                    r.description,
-                    r.amount,
-                    r.currency,
-                    r.source,
-                    batch_id,
+                    (
+                        r.transaction_date,
+                        r.description,
+                        r.amount,
+                        r.currency,
+                        r.source,
+                        r.category,
+                        batch_id,
+                    )
                 )
                 for r in records
             ],
