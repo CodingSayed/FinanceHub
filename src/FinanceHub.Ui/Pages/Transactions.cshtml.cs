@@ -8,6 +8,7 @@ public class TransactionsModel : PageModel
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _configuration;
+    public TransactionSummaryViewModel? Summary { get; private set; }
 
     public TransactionsModel(
         IHttpClientFactory httpClientFactory,
@@ -44,5 +45,17 @@ public class TransactionsModel : PageModel
         };
 
         Transactions = JsonSerializer.Deserialize<List<TransactionViewModel>>(json, options) ?? [];
+
+        var summaryResponse = await client.GetAsync($"{baseUrl}/api/transactions/summary");
+
+        if (summaryResponse.IsSuccessStatusCode)
+        {
+            var summaryJson = await summaryResponse.Content.ReadAsStringAsync();
+
+            Summary = JsonSerializer.Deserialize<TransactionSummaryViewModel>(
+                summaryJson,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            );
+        }
     }
 }

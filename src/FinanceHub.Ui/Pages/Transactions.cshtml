@@ -13,6 +13,31 @@
 }
 else
 {
+    @if (Model.Summary != null)
+    {
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Total Income</h5>
+                    <p>@Model.Summary.TotalIncome</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Total Expenses</h5>
+                    <p>@Model.Summary.TotalExpenses</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Net Balance</h5>
+                    <p>@Model.Summary.NetBalance</p>
+                </div>
+            </div>
+        </div>
+    }
     <table class="table table-striped">
         <thead>
             <tr>

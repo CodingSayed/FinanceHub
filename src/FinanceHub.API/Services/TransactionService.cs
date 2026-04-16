@@ -43,4 +43,38 @@ public class TransactionService
 
         return results;
     }
+
+    public async Task<TransactionSummaryDto> GetSummaryAsync()
+    {
+        decimal totalIncome = 0;
+        decimal totalExpenses = 0;
+
+        await using var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        var query = @"
+            SELECT amount
+            FROM transactions;
+        ";
+
+        await using var command = new NpgsqlCommand(query, connection);
+        await using var reader = await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            var amount = reader.GetDecimal(0);
+
+            if (amount > 0)
+                totalIncome += amount;
+            else
+                totalExpenses += amount;
+        }
+
+        return new TransactionSummaryDto
+        {
+            TotalIncome = totalIncome,
+            TotalExpenses = totalExpenses,
+            NetBalance = totalIncome + totalExpenses
+        };
+    }
 }

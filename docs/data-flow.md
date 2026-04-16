@@ -55,3 +55,13 @@ The application now supports the first full end-to-end user-facing flow:
 2. normalized data is stored in PostgreSQL
 3. the ASP.NET Core API exposes transaction data
 4. the Razor Pages UI renders transactions in a table
+
+## Implemented in Sprint 2.4
+
+The API now provides financial summaries:
+
+- total income
+- total expenses
+- net balance
+
+The UI displays these insights above the transaction list.

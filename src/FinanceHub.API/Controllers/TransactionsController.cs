@@ -20,4 +20,11 @@ public class TransactionsController : ControllerBase
         var transactions = await _transactionService.GetTransactionsAsync();
         return Ok(transactions);
     }
+
+    [HttpGet("summary")]
+    public async Task<IActionResult> GetSummary()
+    {
+        var summary = await _transactionService.GetSummaryAsync();
+        return Ok(summary);
+    }
 }
