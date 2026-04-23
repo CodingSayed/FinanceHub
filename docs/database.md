@@ -77,3 +77,4 @@ Category-based aggregations include:
 - Sprint 3.2 introduced both:
   - API endpoints for category analytics
   - UI support for category filtering and category summary rendering
+  

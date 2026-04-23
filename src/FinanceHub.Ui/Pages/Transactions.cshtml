@@ -58,6 +58,12 @@
     </div>
 }
 
+<h2 class="mb-3">Category Expense Breakdown</h2>
+
+<div class="card p-3 mb-4" style="max-width: 600px; margin: 0 auto;">
+    <canvas id="categoryChart"></canvas>
+</div>
+
 <h2 class="mb-3">Category Summary</h2>
 
 @if (!Model.CategorySummaries.Any())
@@ -124,4 +130,54 @@ else
         }
         </tbody>
     </table>
+}
+
+@section Scripts {
+    <script>
+        const categoryData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategorySummaries));
+
+        const filtered = categoryData.filter(x => x.TotalExpense < 0);
+
+        const labels = filtered.map(x => x.Category);
+        const data = filtered.map(x => Math.abs(x.TotalExpense));
+
+        const ctx = document.getElementById('categoryChart');
+
+        if (ctx && labels.length > 0) {
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Expenses by Category',
+                        data: data,
+                        backgroundColor: [
+                            '#0d6efd', // blauw
+                            '#dc3545', // rood
+                            '#ffc107', // geel
+                            '#198754', // groen
+                            '#6f42c1'  // paars
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    return context.label + ': €' + value.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 }
