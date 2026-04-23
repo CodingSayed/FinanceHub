@@ -99,3 +99,25 @@ The data flow now includes category-based analytics.
 ### Result
 
 Users can now interactively explore financial data based on transaction categories, enabling deeper insight into spending behavior.
+
+## Implemented in Sprint 3.3
+
+The data flow now includes visual analytics based on backend trend data.
+
+### Extended Flow
+
+1. Transactions are stored in PostgreSQL with date, amount, and category data.
+2. The API aggregates trend data by transaction date.
+3. The API exposes:
+   - category summary data
+   - time-series trend data
+4. The UI retrieves:
+   - category summary data for the pie chart
+   - trend data for the line chart
+5. The UI renders:
+   - category expense distribution
+   - income vs expense trend over time
+
+### Result
+
+Users can now move beyond static summaries and tables, and visually inspect financial patterns over time and across categories.

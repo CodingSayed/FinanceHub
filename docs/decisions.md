@@ -98,3 +98,75 @@ Category filtering and aggregation are implemented in the API service layer (`Tr
 
 - service layer contains SQL logic (no abstraction layer yet)
 - may require refactoring if complexity increases significantly
+
+## Why implement trend analytics in the API layer?
+
+### Context
+
+After category analytics were introduced in Sprint 3.2, the next step was to add time-based visual analytics.
+
+A decision was needed on where to calculate trend data:
+
+- in the UI from raw transactions
+- or in the API from aggregated database queries
+
+### Decision
+
+Trend aggregation is implemented in the API layer through a dedicated endpoint:
+
+- `GET /api/transactions/trends`
+
+The aggregation logic remains in `TransactionService` and is executed in SQL.
+
+### Rationale
+
+- keeps analytical logic in the backend
+- avoids duplicating aggregation logic in the UI
+- makes the UI thinner and easier to maintain
+- aligns with the architecture principle that the API owns read and analytics behavior
+
+### Consequences
+
+**Positive:**
+
+- trend logic is centralized
+- the UI consumes a clean analytical contract
+- the system is easier to extend with future visualizations
+
+**Negative:**
+
+- the service layer continues to grow in responsibility
+- future complexity may justify a separate query or analytics layer
+
+## Why use Chart.js for visual analytics?
+
+### Context
+
+Sprint 3.3 required a lightweight way to introduce visual analytics into the Razor Pages UI.
+
+### Decision
+
+Chart.js is used in the UI to render:
+
+- category expense pie chart
+- income vs expense line chart
+
+### Rationale
+
+- easy to integrate into the existing server-rendered UI
+- lightweight and fast to adopt
+- sufficient for current dashboard and analytics needs
+- avoids unnecessary frontend framework complexity
+
+### Consequences
+
+**Positive:**
+
+- quick delivery of high-value visual analytics
+- minimal architectural overhead
+- easy to extend with additional charts
+
+**Negative:**
+
+- chart logic is currently embedded in the page
+- more advanced dashboard behavior may require future refactoring

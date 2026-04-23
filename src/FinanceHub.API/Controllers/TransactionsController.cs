@@ -41,4 +41,11 @@ public class TransactionsController : ControllerBase
         var summaries = await _transactionService.GetCategorySummariesAsync();
         return Ok(summaries);
     }
+
+    [HttpGet("trends")]
+    public async Task<IActionResult> GetTrends()
+    {
+        var trends = await _transactionService.GetTransactionTrendsAsync();
+        return Ok(trends);
+    }
 }

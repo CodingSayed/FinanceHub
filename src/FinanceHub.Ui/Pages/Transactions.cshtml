@@ -60,8 +60,14 @@
 
 <h2 class="mb-3">Category Expense Breakdown</h2>
 
-<div class="card p-3 mb-4" style="max-width: 600px; margin: 0 auto;">
+<div class="card p-3 mb-4" style="max-width: 600px; margin: 0 auto; height: 360px;">
     <canvas id="categoryChart"></canvas>
+</div>
+
+<h2 class="mb-3">Income vs Expense Trend</h2>
+
+<div class="card p-3 mb-4" style="height: 420px;">
+    <canvas id="trendChart"></canvas>
 </div>
 
 <h2 class="mb-3">Category Summary</h2>
@@ -135,28 +141,28 @@ else
 @section Scripts {
     <script>
         const categoryData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategorySummaries));
+        const trendData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Trends));
 
-        const filtered = categoryData.filter(x => x.TotalExpense < 0);
+        const expenseOnlyCategories = categoryData.filter(x => x.TotalExpense < 0);
+        const categoryLabels = expenseOnlyCategories.map(x => x.Category);
+        const categoryValues = expenseOnlyCategories.map(x => Math.abs(x.TotalExpense));
 
-        const labels = filtered.map(x => x.Category);
-        const data = filtered.map(x => Math.abs(x.TotalExpense));
+        const categoryCtx = document.getElementById('categoryChart');
 
-        const ctx = document.getElementById('categoryChart');
-
-        if (ctx && labels.length > 0) {
-            new Chart(ctx, {
+        if (categoryCtx && categoryLabels.length > 0) {
+            new Chart(categoryCtx, {
                 type: 'pie',
                 data: {
-                    labels: labels,
+                    labels: categoryLabels,
                     datasets: [{
                         label: 'Expenses by Category',
-                        data: data,
+                        data: categoryValues,
                         backgroundColor: [
-                            '#0d6efd', // blauw
-                            '#dc3545', // rood
-                            '#ffc107', // geel
-                            '#198754', // groen
-                            '#6f42c1'  // paars
+                            '#0d6efd',
+                            '#dc3545',
+                            '#ffc107',
+                            '#198754',
+                            '#6f42c1'
                         ]
                     }]
                 },
@@ -174,6 +180,59 @@ else
                                     return context.label + ': €' + value.toFixed(2);
                                 }
                             }
+                        }
+                    }
+                }
+            });
+        }
+
+        const trendLabels = trendData.map(x => x.Date.split('T')[0]);
+        const incomeValues = trendData.map(x => x.Income);
+        const expenseValues = trendData.map(x => Math.abs(x.Expense));
+
+        const trendCtx = document.getElementById('trendChart');
+
+        if (trendCtx && trendLabels.length > 0) {
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: trendLabels,
+                    datasets: [
+                        {
+                            label: 'Income',
+                            data: incomeValues,
+                            borderColor: '#198754',
+                            backgroundColor: '#198754',
+                            tension: 0.2
+                        },
+                        {
+                            label: 'Expenses',
+                            data: expenseValues,
+                            borderColor: '#dc3545',
+                            backgroundColor: '#dc3545',
+                            tension: 0.2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    return context.dataset.label + ': €' + Number(value).toFixed(2);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     }
                 }

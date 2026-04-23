@@ -78,3 +78,31 @@ Category-based aggregations include:
   - API endpoints for category analytics
   - UI support for category filtering and category summary rendering
   
+## Implemented in Sprint 3.3
+
+The existing `transactions` table is now also used as the source for time-series analytics.
+
+### Trend Analytics Usage
+
+The API aggregates transaction data by `transaction_date` to support trend visualization.
+
+This includes:
+
+- total income per day
+- total expense per day
+- net balance per day
+
+### Example Analytical Use
+
+The API trend endpoint is based on grouped reads over the `transactions` table, using the transaction date as the time dimension.
+
+Example grouping pattern:
+
+    GROUP BY transaction_date
+    ORDER BY transaction_date
+
+### Notes
+
+- No new tables were required for Sprint 3.3
+- Trend analytics are computed dynamically from transactional data
+- This keeps the storage layer simple while expanding analytical capability in the API and UI

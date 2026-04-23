@@ -22,6 +22,7 @@ public class TransactionsModel : PageModel
     public TransactionSummaryViewModel? Summary { get; private set; }
     public List<string> Categories { get; private set; } = [];
     public List<CategorySummaryViewModel> CategorySummaries { get; private set; } = [];
+    public List<TransactionTrendViewModel> Trends { get; private set; } = [];
 
     [BindProperty(SupportsGet = true)]
     public string? Category { get; set; }
@@ -52,6 +53,7 @@ public class TransactionsModel : PageModel
 
         var categoriesUrl = $"{baseUrl}/api/transactions/categories";
         var categorySummariesUrl = $"{baseUrl}/api/transactions/categories/summary";
+        var trendsUrl = $"{baseUrl}/api/transactions/trends";
 
         var transactionsResponse = await client.GetAsync(transactionsUrl);
 
@@ -83,6 +85,14 @@ public class TransactionsModel : PageModel
         {
             var categorySummariesJson = await categorySummariesResponse.Content.ReadAsStringAsync();
             CategorySummaries = JsonSerializer.Deserialize<List<CategorySummaryViewModel>>(categorySummariesJson, options) ?? [];
+        }
+
+        var trendsResponse = await client.GetAsync(trendsUrl);
+
+        if (trendsResponse.IsSuccessStatusCode)
+        {
+            var trendsJson = await trendsResponse.Content.ReadAsStringAsync();
+            Trends = JsonSerializer.Deserialize<List<TransactionTrendViewModel>>(trendsJson, options) ?? [];
         }
     }
 }

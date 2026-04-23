@@ -179,4 +179,40 @@ public class TransactionService
 
         return results;
     }
+
+    public async Task<List<TransactionTrendDto>> GetTransactionTrendsAsync()
+    {
+        var results = new List<TransactionTrendDto>();
+
+        await using var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        var query = """
+            SELECT
+                transaction_date,
+                COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) AS income,
+                COALESCE(SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END), 0) AS expense,
+                COALESCE(SUM(amount), 0) AS net_balance
+            FROM transactions
+            GROUP BY transaction_date
+            ORDER BY transaction_date;
+            """;
+
+        await using var command = new NpgsqlCommand(query, connection);
+        await using var reader = await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            results.Add(new TransactionTrendDto
+            {
+                Date = reader.GetDateTime(0),
+                Income = reader.GetDecimal(1),
+                Expense = reader.GetDecimal(2),
+                NetBalance = reader.GetDecimal(3)
+            });
+        }
+
+        return results;
+    }
+
 }

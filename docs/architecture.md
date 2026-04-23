@@ -94,3 +94,48 @@ This lays the foundation for future analytical features such as:
 - charting
 - trend analysis
 - predictive modeling
+
+## Implemented in Sprint 3.3
+
+The application now includes visual analytics capabilities in the UI, backed by dedicated trend data from the API.
+
+### API Enhancements
+
+The API now exposes a trend endpoint:
+
+- retrieve income and expense trends over time:
+  - `GET /api/transactions/trends`
+
+This endpoint is implemented in the existing `TransactionService` using raw SQL aggregation grouped by transaction date.
+
+The trend response includes:
+
+- date
+- income
+- expense
+- net balance
+
+### UI Enhancements
+
+The Razor Pages UI now supports chart-based analytics:
+
+- category expense breakdown pie chart
+- income vs expense trend line chart
+
+The UI consumes API-provided analytical data and renders it using Chart.js.
+
+### Architectural Impact
+
+This extends FinanceHub from tabular analytics to visual analytics.
+
+The architecture now supports:
+
+- ingestion and categorization in Python
+- analytical read endpoints in the API
+- chart rendering in the UI
+
+This creates a stronger foundation for future dashboard-style functionality, including:
+
+- richer chart layouts
+- monthly trend analysis
+- comparative analytics across categories and periods
