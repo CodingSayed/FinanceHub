@@ -15,16 +15,30 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get([FromQuery] string? category = null)
     {
-        var transactions = await _transactionService.GetTransactionsAsync();
+        var transactions = await _transactionService.GetTransactionsAsync(category);
         return Ok(transactions);
     }
 
     [HttpGet("summary")]
-    public async Task<IActionResult> GetSummary()
+    public async Task<IActionResult> GetSummary([FromQuery] string? category = null)
     {
-        var summary = await _transactionService.GetSummaryAsync();
+        var summary = await _transactionService.GetSummaryAsync(category);
         return Ok(summary);
+    }
+
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetCategories()
+    {
+        var categories = await _transactionService.GetCategoriesAsync();
+        return Ok(categories);
+    }
+
+    [HttpGet("categories/summary")]
+    public async Task<IActionResult> GetCategorySummaries()
+    {
+        var summaries = await _transactionService.GetCategorySummariesAsync();
+        return Ok(summaries);
     }
 }
