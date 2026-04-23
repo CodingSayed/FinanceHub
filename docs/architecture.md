@@ -48,3 +48,49 @@ This completes the first end-to-end path across:
 - database storage
 - API access
 - frontend rendering
+
+## Implemented in Sprint 3.2
+
+The API and UI layers now support category-based analytics.
+
+### API Enhancements
+
+The API now exposes additional endpoints:
+
+- filter transactions by category:
+  - `GET /api/transactions?category=Groceries`
+- filter financial summary by category:
+  - `GET /api/transactions/summary?category=Groceries`
+- retrieve available categories:
+  - `GET /api/transactions/categories`
+- retrieve aggregated category summaries:
+  - `GET /api/transactions/categories/summary`
+
+All data access and query logic is implemented in the `TransactionService` using raw SQL with Npgsql.
+
+No repository abstraction layer is used. The service layer directly interacts with PostgreSQL.
+
+### UI Enhancements
+
+The Razor Pages UI now supports:
+
+- category-based filtering via dropdown
+- filtered transaction views
+- filtered summary metrics
+- category-level aggregated analytics table
+
+### Architectural Impact
+
+This extends the system from simple data retrieval to analytical capabilities.
+
+The architecture now clearly separates:
+
+- ingestion (Python, write-focused)
+- API (read + analytics logic)
+- UI (presentation layer)
+
+This lays the foundation for future analytical features such as:
+
+- charting
+- trend analysis
+- predictive modeling

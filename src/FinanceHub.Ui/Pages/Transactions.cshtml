@@ -7,37 +7,98 @@
 
 <h1 class="mb-4">Transactions</h1>
 
+<form method="get" class="mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label asp-for="Category" class="form-label">Category</label>
+            <select asp-for="Category" class="form-select">
+                <option value="">All categories</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category">@category</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-auto">
+            <button type="submit" class="btn btn-primary">Apply Filter</button>
+            <a asp-page="/Transactions" class="btn btn-secondary ms-2">Reset</a>
+        </div>
+    </div>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(Model.Category))
+{
+    <p><strong>Active category filter:</strong> @Model.Category</p>
+}
+
+@if (Model.Summary != null)
+{
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Total Income</h5>
+                <p>@Model.Summary.TotalIncome</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Total Expenses</h5>
+                <p>@Model.Summary.TotalExpenses</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Net Balance</h5>
+                <p>@Model.Summary.NetBalance</p>
+            </div>
+        </div>
+    </div>
+}
+
+<h2 class="mb-3">Category Summary</h2>
+
+@if (!Model.CategorySummaries.Any())
+{
+    <p>No category summary data available.</p>
+}
+else
+{
+    <table class="table table-striped mb-4">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Transaction Count</th>
+                <th>Total Income</th>
+                <th>Total Expense</th>
+                <th>Net Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CategorySummaries)
+            {
+                <tr>
+                    <td>@item.Category</td>
+                    <td>@item.TransactionCount</td>
+                    <td>@item.TotalIncome</td>
+                    <td>@item.TotalExpense</td>
+                    <td>@item.NetBalance</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<h2 class="mb-3">Transaction List</h2>
+
 @if (!Model.Transactions.Any())
 {
     <p>No transactions found.</p>
 }
 else
 {
-    @if (Model.Summary != null)
-    {
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card p-3">
-                    <h5>Total Income</h5>
-                    <p>@Model.Summary.TotalIncome</p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card p-3">
-                    <h5>Total Expenses</h5>
-                    <p>@Model.Summary.TotalExpenses</p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card p-3">
-                    <h5>Net Balance</h5>
-                    <p>@Model.Summary.NetBalance</p>
-                </div>
-            </div>
-        </div>
-    }
     <table class="table table-striped">
         <thead>
             <tr>

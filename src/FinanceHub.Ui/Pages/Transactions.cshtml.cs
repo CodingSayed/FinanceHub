@@ -1,5 +1,6 @@
 using System.Text.Json;
 using FinanceHub.Ui.Models.Transactions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FinanceHub.Ui.Pages;
@@ -8,7 +9,6 @@ public class TransactionsModel : PageModel
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _configuration;
-    public TransactionSummaryViewModel? Summary { get; private set; }
 
     public TransactionsModel(
         IHttpClientFactory httpClientFactory,
@@ -19,6 +19,12 @@ public class TransactionsModel : PageModel
     }
 
     public List<TransactionViewModel> Transactions { get; private set; } = [];
+    public TransactionSummaryViewModel? Summary { get; private set; }
+    public List<string> Categories { get; private set; } = [];
+    public List<CategorySummaryViewModel> CategorySummaries { get; private set; } = [];
+
+    [BindProperty(SupportsGet = true)]
+    public string? Category { get; set; }
 
     public async Task OnGetAsync()
     {
@@ -30,32 +36,53 @@ public class TransactionsModel : PageModel
         }
 
         var client = _httpClientFactory.CreateClient();
-        var response = await client.GetAsync($"{baseUrl}/api/transactions");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            return;
-        }
-
-        var json = await response.Content.ReadAsStringAsync();
 
         var options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         };
 
-        Transactions = JsonSerializer.Deserialize<List<TransactionViewModel>>(json, options) ?? [];
+        var transactionsUrl = string.IsNullOrWhiteSpace(Category)
+            ? $"{baseUrl}/api/transactions"
+            : $"{baseUrl}/api/transactions?category={Uri.EscapeDataString(Category)}";
 
-        var summaryResponse = await client.GetAsync($"{baseUrl}/api/transactions/summary");
+        var summaryUrl = string.IsNullOrWhiteSpace(Category)
+            ? $"{baseUrl}/api/transactions/summary"
+            : $"{baseUrl}/api/transactions/summary?category={Uri.EscapeDataString(Category)}";
+
+        var categoriesUrl = $"{baseUrl}/api/transactions/categories";
+        var categorySummariesUrl = $"{baseUrl}/api/transactions/categories/summary";
+
+        var transactionsResponse = await client.GetAsync(transactionsUrl);
+
+        if (transactionsResponse.IsSuccessStatusCode)
+        {
+            var transactionsJson = await transactionsResponse.Content.ReadAsStringAsync();
+            Transactions = JsonSerializer.Deserialize<List<TransactionViewModel>>(transactionsJson, options) ?? [];
+        }
+
+        var summaryResponse = await client.GetAsync(summaryUrl);
 
         if (summaryResponse.IsSuccessStatusCode)
         {
             var summaryJson = await summaryResponse.Content.ReadAsStringAsync();
+            Summary = JsonSerializer.Deserialize<TransactionSummaryViewModel>(summaryJson, options);
+        }
 
-            Summary = JsonSerializer.Deserialize<TransactionSummaryViewModel>(
-                summaryJson,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-            );
+        var categoriesResponse = await client.GetAsync(categoriesUrl);
+
+        if (categoriesResponse.IsSuccessStatusCode)
+        {
+            var categoriesJson = await categoriesResponse.Content.ReadAsStringAsync();
+            Categories = JsonSerializer.Deserialize<List<string>>(categoriesJson, options) ?? [];
+        }
+
+        var categorySummariesResponse = await client.GetAsync(categorySummariesUrl);
+
+        if (categorySummariesResponse.IsSuccessStatusCode)
+        {
+            var categorySummariesJson = await categorySummariesResponse.Content.ReadAsStringAsync();
+            CategorySummaries = JsonSerializer.Deserialize<List<CategorySummaryViewModel>>(categorySummariesJson, options) ?? [];
         }
     }
 }

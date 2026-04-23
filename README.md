@@ -28,3 +28,31 @@ FinanceHub is a hybrid .NET + Python personal finance analytics platform.
 ## Status
 
  Sprint 0 — foundation and setup in progress
+
+## Features
+
+### Data Ingestion
+
+- CSV ingestion pipeline (Python)
+- Data normalization and validation
+- Rule-based transaction categorization
+
+### Backend API
+
+- Transaction retrieval from PostgreSQL
+- Financial summary calculations
+- Category-based filtering
+- Category analytics endpoints
+
+### UI (Razor Pages)
+
+- Transaction table view
+- Summary dashboard (income, expenses, net balance)
+- Category filtering via dropdown
+- Category analytics overview
+
+### Analytics Capabilities
+
+- Income vs expenses overview
+- Category-level breakdown of spending
+- Interactive filtering using query parameters

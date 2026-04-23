@@ -60,3 +60,41 @@ This will make it easier later to:
 - persist import metadata to the database
 - show import history in the UI
 - track data quality metrics per run
+
+## Why implement category analytics in the API layer?
+
+### Context
+
+Category information was already available in the database after Sprint 3.1, but no analytical capabilities were exposed.
+
+A decision was required on where to implement:
+
+- filtering logic
+- aggregation logic
+
+### Decision
+
+Category filtering and aggregation are implemented in the API service layer (`TransactionService`) using raw SQL.
+
+### Rationale
+
+- SQL is well-suited for aggregation and filtering
+- keeps the UI simple and focused on rendering
+- avoids duplicating logic across layers
+- aligns with separation of concerns:
+  - ingestion = data creation
+  - API = data querying and analytics
+  - UI = presentation
+
+### Consequences
+
+**Positive:**
+
+- efficient queries executed directly in PostgreSQL
+- clear and maintainable architecture
+- easy to extend with new analytics endpoints
+
+**Negative:**
+
+- service layer contains SQL logic (no abstraction layer yet)
+- may require refactoring if complexity increases significantly

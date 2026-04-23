@@ -75,3 +75,27 @@ This enables:
 - spend analysis
 - grouping by category
 - future ML-based categorization
+
+## Implemented in Sprint 3.2
+
+The data flow now includes category-based analytics.
+
+### Extended Flow
+
+1. Transactions are categorized during ingestion.
+2. Category values are stored in PostgreSQL.
+3. The API supports:
+   - filtering transactions by category
+   - filtering summaries by category
+   - retrieving category lists
+   - computing category-level aggregations
+4. The UI:
+   - retrieves categories from the API
+   - allows users to select a category filter
+   - sends the selected category as a query parameter
+   - renders filtered transactions and summaries
+   - displays category-level analytics
+
+### Result
+
+Users can now interactively explore financial data based on transaction categories, enabling deeper insight into spending behavior.
