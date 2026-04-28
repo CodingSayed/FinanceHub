@@ -139,3 +139,31 @@ This creates a stronger foundation for future dashboard-style functionality, inc
 - richer chart layouts
 - monthly trend analysis
 - comparative analytics across categories and periods
+
+## Implemented in Sprint 3.4
+
+The ingestion layer now uses a more realistic transaction dataset.
+
+### Ingestion Enhancements
+
+Sprint 3.4 introduced:
+
+- a larger realistic CSV dataset
+- recurring income and expenses
+- broader transaction descriptions
+- intentional data quality issues
+- improved rule-based categorization
+
+### Architectural Impact
+
+The system now better represents real-world ingestion scenarios.
+
+The ingestion layer continues to handle:
+
+- normalization
+- validation
+- categorization
+- persistence
+- data quality issue tracking
+
+This makes the platform more realistic and prepares it for future support of external bank exports or larger datasets.

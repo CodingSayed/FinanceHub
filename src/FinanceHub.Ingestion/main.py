@@ -20,10 +20,10 @@ def main() -> None:
     """
     print("FinanceHub Ingestion started...")
 
-    sample_file_path = CURRENT_DIR.parent.parent / "sample-data" / "sample.csv"
+    sample_file_path = CURRENT_DIR.parent.parent / "sample-data" / "realistic-transactions.csv"
 
     batch = ImportBatch(
-        source_name="sample-csv",
+        source_name="realistic-transactions.csv",
         file_name=sample_file_path.name,
         started_at_utc=datetime.now(UTC)
     )

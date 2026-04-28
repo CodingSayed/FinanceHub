@@ -170,3 +170,38 @@ Chart.js is used in the UI to render:
 
 - chart logic is currently embedded in the page
 - more advanced dashboard behavior may require future refactoring
+
+
+## Why introduce a realistic controlled dataset before using external datasets?
+
+### Context
+
+The initial sample dataset was useful for proving the ingestion and analytics flow, but it was too small to demonstrate realistic financial behavior.
+
+A decision was needed between immediately using an external dataset or first creating a controlled realistic dataset.
+
+### Decision
+
+Sprint 3.4 introduces a controlled realistic CSV dataset before adopting external datasets such as Kaggle or real bank exports.
+
+### Rationale
+
+- keeps the input format aligned with the current ingestion pipeline
+- allows intentional testing of data quality scenarios
+- avoids privacy concerns from real bank data
+- makes debugging easier than starting with an unknown external dataset
+- creates more meaningful charts and category summaries
+
+### Consequences
+
+**Positive:**
+
+- more realistic analytics output
+- better validation of the ingestion pipeline
+- controlled data quality issue testing
+- improved categorization coverage
+
+**Negative:**
+
+- dataset is still synthetic
+- external dataset compatibility remains future work

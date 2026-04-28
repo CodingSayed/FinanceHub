@@ -121,3 +121,21 @@ The data flow now includes visual analytics based on backend trend data.
 ### Result
 
 Users can now move beyond static summaries and tables, and visually inspect financial patterns over time and across categories.
+
+## Implemented in Sprint 3.4
+
+The data flow now supports a more realistic transaction dataset.
+
+### Extended Flow
+
+1. A larger CSV file is provided as input.
+2. The ingestion layer parses multiple transaction formats.
+3. Valid transactions are normalized and categorized.
+4. Invalid records are captured as data quality issues.
+5. Successful records are stored in PostgreSQL.
+6. The API exposes the larger dataset through existing analytics endpoints.
+7. The UI visualizes more meaningful category and trend patterns.
+
+### Result
+
+The application now demonstrates a more realistic end-to-end analytics flow, including valid data, invalid data, categorization gaps, and improved category coverage.

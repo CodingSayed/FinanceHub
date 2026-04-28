@@ -106,3 +106,32 @@ Example grouping pattern:
 - No new tables were required for Sprint 3.3
 - Trend analytics are computed dynamically from transactional data
 - This keeps the storage layer simple while expanding analytical capability in the API and UI
+
+## Implemented in Sprint 3.4
+
+The database now stores a more realistic transaction dataset.
+
+### Dataset Impact
+
+Sprint 3.4 introduced a larger CSV dataset with:
+
+- recurring income
+- recurring expenses
+- multiple spending categories
+- invalid date examples
+- invalid amount examples
+- validation threshold examples
+
+### Persistence Behavior
+
+The existing tables continue to support the ingestion flow:
+
+- `import_batches` stores import metadata
+- `transactions` stores valid normalized transactions
+- `data_quality_issues` stores invalid or rejected records
+
+### Notes
+
+- No schema changes were required for Sprint 3.4
+- Existing tables were sufficient for realistic ingestion testing
+- The larger dataset makes analytics charts and category summaries more meaningful
