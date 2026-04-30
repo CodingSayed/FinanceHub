@@ -5,138 +5,163 @@
     ViewData["Title"] = "Transactions";
 }
 
-<h1 class="mb-4">Transactions</h1>
-
-<form method="get" class="mb-4">
-    <div class="row g-3 align-items-end">
-        <div class="col-md-4">
-            <label asp-for="Category" class="form-label">Category</label>
-            <select asp-for="Category" class="form-select">
-                <option value="">All categories</option>
-                @foreach (var category in Model.Categories)
-                {
-                    <option value="@category">@category</option>
-                }
-            </select>
-        </div>
-
-        <div class="col-md-auto">
-            <button type="submit" class="btn btn-primary">Apply Filter</button>
-            <a asp-page="/Transactions" class="btn btn-secondary ms-2">Reset</a>
-        </div>
+<div class="dashboard-header">
+    <div>
+        <h1>Finance Dashboard</h1>
+        <p class="text-muted mb-0">Analyze income, expenses, categories, and trends.</p>
     </div>
-</form>
+</div>
 
-@if (!string.IsNullOrWhiteSpace(Model.Category))
-{
-    <p><strong>Active category filter:</strong> @Model.Category</p>
-}
+<div class="dashboard-section">
+    <form method="get">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label asp-for="Category" class="form-label">Category</label>
+                <select asp-for="Category" class="form-select">
+                    <option value="">All categories</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-auto">
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+                <a asp-page="/Transactions" class="btn btn-secondary ms-2">Reset</a>
+            </div>
+        </div>
+    </form>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Category))
+    {
+        <div class="alert alert-info mt-3 mb-0">
+            Active category filter: <strong>@Model.Category</strong>
+        </div>
+    }
+</div>
 
 @if (Model.Summary != null)
 {
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card p-3">
-                <h5>Total Income</h5>
-                <p>@Model.Summary.TotalIncome</p>
+    <div class="dashboard-grid summary-grid">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <span class="dashboard-card-label">Total Income</span>
+                <strong class="dashboard-card-value">@Model.Summary.TotalIncome.ToString("C")</strong>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card p-3">
-                <h5>Total Expenses</h5>
-                <p>@Model.Summary.TotalExpenses</p>
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <span class="dashboard-card-label">Total Expenses</span>
+                <strong class="dashboard-card-value">@Model.Summary.TotalExpenses.ToString("C")</strong>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card p-3">
-                <h5>Net Balance</h5>
-                <p>@Model.Summary.NetBalance</p>
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <span class="dashboard-card-label">Net Balance</span>
+                <strong class="dashboard-card-value">@Model.Summary.NetBalance.ToString("C")</strong>
             </div>
         </div>
     </div>
 }
 
-<h2 class="mb-3">Category Expense Breakdown</h2>
+<div class="dashboard-grid analytics-grid">
+    <div class="card dashboard-card">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Category Expense Breakdown</h2>
+            <div class="chart-container chart-container-pie">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
 
-<div class="card p-3 mb-4" style="max-width: 600px; margin: 0 auto; height: 360px;">
-    <canvas id="categoryChart"></canvas>
+    <div class="card dashboard-card">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Income vs Expense Trend</h2>
+            <div class="chart-container chart-container-line">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
 
-<h2 class="mb-3">Income vs Expense Trend</h2>
+<div class="dashboard-section">
+    <h2 class="h4 mb-3">Category Summary</h2>
 
-<div class="card p-3 mb-4" style="height: 420px;">
-    <canvas id="trendChart"></canvas>
+    @if (!Model.CategorySummaries.Any())
+    {
+        <p>No category summary data available.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Transaction Count</th>
+                        <th>Total Income</th>
+                        <th>Total Expense</th>
+                        <th>Net Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CategorySummaries)
+                    {
+                        <tr>
+                            <td>@item.Category</td>
+                            <td>@item.TransactionCount</td>
+                            <td>@item.TotalIncome.ToString("C")</td>
+                            <td>@item.TotalExpense.ToString("C")</td>
+                            <td>@item.NetBalance.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
 
-<h2 class="mb-3">Category Summary</h2>
+<div class="dashboard-section">
+    <h2 class="h4 mb-3">Transaction List</h2>
 
-@if (!Model.CategorySummaries.Any())
-{
-    <p>No category summary data available.</p>
-}
-else
-{
-    <table class="table table-striped mb-4">
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Transaction Count</th>
-                <th>Total Income</th>
-                <th>Total Expense</th>
-                <th>Net Balance</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.CategorySummaries)
-            {
-                <tr>
-                    <td>@item.Category</td>
-                    <td>@item.TransactionCount</td>
-                    <td>@item.TotalIncome</td>
-                    <td>@item.TotalExpense</td>
-                    <td>@item.NetBalance</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-<h2 class="mb-3">Transaction List</h2>
-
-@if (!Model.Transactions.Any())
-{
-    <p>No transactions found.</p>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Currency</th>
-                <th>Source</th>
-                <th>Category</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var transaction in Model.Transactions)
-        {
-            <tr>
-                <td>@transaction.TransactionDate.ToString("yyyy-MM-dd")</td>
-                <td>@transaction.Description</td>
-                <td>@transaction.Amount</td>
-                <td>@transaction.Currency</td>
-                <td>@transaction.Source</td>
-                <td>@transaction.Category</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
+    @if (!Model.Transactions.Any())
+    {
+        <p>No transactions found.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Source</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var transaction in Model.Transactions)
+                {
+                    <tr>
+                        <td>@transaction.TransactionDate.ToString("yyyy-MM-dd")</td>
+                        <td>@transaction.Description</td>
+                        <td>@transaction.Amount.ToString("C")</td>
+                        <td>@transaction.Currency</td>
+                        <td>@transaction.Source</td>
+                        <td>@transaction.Category</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
 
 @section Scripts {
     <script>
@@ -162,7 +187,9 @@ else
                             '#dc3545',
                             '#ffc107',
                             '#198754',
-                            '#6f42c1'
+                            '#6f42c1',
+                            '#fd7e14',
+                            '#20c997'
                         ]
                     }]
                 },
