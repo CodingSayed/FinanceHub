@@ -167,3 +167,33 @@ The ingestion layer continues to handle:
 - data quality issue tracking
 
 This makes the platform more realistic and prepares it for future support of external bank exports or larger datasets.
+
+## Implemented in Sprint 4
+
+The UI layer now includes a structured dashboard layout for financial analytics.
+
+### UI Enhancements
+
+Sprint 4 introduced:
+
+- dashboard-style layout using grid-based structure
+- summary cards with consistent styling
+- side-by-side chart layout (pie chart + line chart)
+- responsive behavior for smaller screens
+- consistent formatting for financial values
+
+### Architectural Impact
+
+The UI has evolved from a simple data display into a structured analytics dashboard.
+
+The architecture now supports:
+
+- separation between data retrieval and presentation layout
+- reusable styling through CSS instead of inline styles
+- scalable dashboard structure for future analytics features
+
+This prepares the UI layer for:
+
+- additional filters (e.g. date range)
+- more complex dashboards
+- extended analytical views

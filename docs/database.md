@@ -135,3 +135,19 @@ The existing tables continue to support the ingestion flow:
 - No schema changes were required for Sprint 3.4
 - Existing tables were sufficient for realistic ingestion testing
 - The larger dataset makes analytics charts and category summaries more meaningful
+
+## Implemented in Sprint 4
+
+No database changes were introduced in this sprint.
+
+### Notes
+
+- The existing schema continues to support all dashboard functionality
+- All analytics (summary, category aggregation, trends) are computed dynamically from the `transactions` table
+- The dashboard improvements are purely in the UI layer
+
+This confirms that the current database design is sufficient for:
+
+- summary analytics
+- category analytics
+- time-series analytics

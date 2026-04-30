@@ -139,3 +139,22 @@ The data flow now supports a more realistic transaction dataset.
 ### Result
 
 The application now demonstrates a more realistic end-to-end analytics flow, including valid data, invalid data, categorization gaps, and improved category coverage.
+
+## Implemented in Sprint 4
+
+The data flow now supports a structured dashboard presentation layer.
+
+### Extended Flow
+
+1. The API provides transaction, summary, category, and trend data.
+2. The UI retrieves all required datasets in a single page load.
+3. The UI organizes data into:
+   - summary cards
+   - category distribution chart
+   - trend chart
+   - tabular views
+4. Chart data is transformed client-side for visualization.
+
+### Result
+
+The UI now presents data in a structured dashboard format, allowing users to quickly interpret financial insights without scanning raw tables.

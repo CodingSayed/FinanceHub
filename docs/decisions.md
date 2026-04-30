@@ -205,3 +205,39 @@ Sprint 3.4 introduces a controlled realistic CSV dataset before adopting externa
 
 - dataset is still synthetic
 - external dataset compatibility remains future work
+
+## Why introduce a dashboard layout in the UI layer?
+
+### Context
+
+After Sprint 3.3, the application supported visual analytics but still presented them in a linear layout.
+
+A decision was needed on whether to:
+
+- keep a simple page structure
+- or introduce a more structured dashboard layout
+
+### Decision
+
+Sprint 4 introduces a dashboard-style layout using grid-based UI composition.
+
+### Rationale
+
+- improves usability and readability of analytics
+- groups related information (cards + charts)
+- aligns with common financial dashboard patterns
+- prepares the UI for future expansion (filters, additional charts)
+
+### Consequences
+
+**Positive:**
+
+- more professional user experience
+- better use of screen space
+- improved clarity of financial insights
+- scalable layout for future features
+
+**Negative:**
+
+- additional CSS complexity
+- tighter coupling between layout and data presentation
