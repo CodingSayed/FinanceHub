@@ -27,6 +27,12 @@ public class TransactionsModel : PageModel
     [BindProperty(SupportsGet = true)]
     public string? Category { get; set; }
 
+    [BindProperty(SupportsGet = true)]
+    public DateTime? StartDate { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public DateTime? EndDate { get; set; }
+
     public async Task OnGetAsync()
     {
         var baseUrl = _configuration["ApiSettings:BaseUrl"];
@@ -43,17 +49,13 @@ public class TransactionsModel : PageModel
             PropertyNameCaseInsensitive = true
         };
 
-        var transactionsUrl = string.IsNullOrWhiteSpace(Category)
-            ? $"{baseUrl}/api/transactions"
-            : $"{baseUrl}/api/transactions?category={Uri.EscapeDataString(Category)}";
+        var filterQueryString = BuildFilterQueryString();
 
-        var summaryUrl = string.IsNullOrWhiteSpace(Category)
-            ? $"{baseUrl}/api/transactions/summary"
-            : $"{baseUrl}/api/transactions/summary?category={Uri.EscapeDataString(Category)}";
-
+        var transactionsUrl = $"{baseUrl}/api/transactions{filterQueryString}";
+        var summaryUrl = $"{baseUrl}/api/transactions/summary{filterQueryString}";
         var categoriesUrl = $"{baseUrl}/api/transactions/categories";
-        var categorySummariesUrl = $"{baseUrl}/api/transactions/categories/summary";
-        var trendsUrl = $"{baseUrl}/api/transactions/trends";
+        var categorySummariesUrl = $"{baseUrl}/api/transactions/categories/summary{filterQueryString}";
+        var trendsUrl = $"{baseUrl}/api/transactions/trends{filterQueryString}";
 
         var transactionsResponse = await client.GetAsync(transactionsUrl);
 
@@ -94,5 +96,32 @@ public class TransactionsModel : PageModel
             var trendsJson = await trendsResponse.Content.ReadAsStringAsync();
             Trends = JsonSerializer.Deserialize<List<TransactionTrendViewModel>>(trendsJson, options) ?? [];
         }
+    }
+
+    private string BuildFilterQueryString()
+    {
+        var filters = new List<string>();
+
+        if (!string.IsNullOrWhiteSpace(Category))
+        {
+            filters.Add($"category={Uri.EscapeDataString(Category)}");
+        }
+
+        if (StartDate.HasValue)
+        {
+            filters.Add($"startDate={StartDate.Value:yyyy-MM-dd}");
+        }
+
+        if (EndDate.HasValue)
+        {
+            filters.Add($"endDate={EndDate.Value:yyyy-MM-dd}");
+        }
+
+        if (filters.Count == 0)
+        {
+            return string.Empty;
+        }
+
+        return $"?{string.Join("&", filters)}";
     }
 }

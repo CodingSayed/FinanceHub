@@ -12,7 +12,10 @@ public class TransactionService
         _connectionString = configuration.GetConnectionString("Default")!;
     }
 
-    public async Task<List<TransactionDto>> GetTransactionsAsync(string? category = null)
+    public async Task<List<TransactionDto>> GetTransactionsAsync(
+        string? category = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null)
     {
         var results = new List<TransactionDto>();
 
@@ -24,12 +27,26 @@ public class TransactionService
             FROM transactions
             """;
 
+        var conditions = new List<string>();
+
         if (!string.IsNullOrWhiteSpace(category))
         {
-            query += """
-                
-                WHERE category = @category
-                """;
+            conditions.Add("category = @category");
+        }
+
+        if (startDate.HasValue)
+        {
+            conditions.Add("transaction_date >= @startDate");
+        }
+
+        if (endDate.HasValue)
+        {
+            conditions.Add("transaction_date <= @endDate");
+        }
+
+        if (conditions.Count > 0)
+        {
+            query += $" WHERE {string.Join(" AND ", conditions)}";
         }
 
         query += """
@@ -38,11 +55,7 @@ public class TransactionService
             """;
 
         await using var command = new NpgsqlCommand(query, connection);
-
-        if (!string.IsNullOrWhiteSpace(category))
-        {
-            command.Parameters.AddWithValue("category", category);
-        }
+        AddFilterParameters(command, category, startDate, endDate);
 
         await using var reader = await command.ExecuteReaderAsync();
 
@@ -63,7 +76,10 @@ public class TransactionService
         return results;
     }
 
-    public async Task<TransactionSummaryDto> GetSummaryAsync(string? category = null)
+    public async Task<TransactionSummaryDto> GetSummaryAsync(
+        string? category = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null)
     {
         decimal totalIncome = 0;
         decimal totalExpenses = 0;
@@ -76,22 +92,17 @@ public class TransactionService
             FROM transactions
             """;
 
-        if (!string.IsNullOrWhiteSpace(category))
+        var conditions = BuildFilterConditions(category, startDate, endDate);
+
+        if (conditions.Count > 0)
         {
-            query += """
-                
-                WHERE category = @category
-                """;
+            query += $" WHERE {string.Join(" AND ", conditions)}";
         }
 
         query += ";";
 
         await using var command = new NpgsqlCommand(query, connection);
-
-        if (!string.IsNullOrWhiteSpace(category))
-        {
-            command.Parameters.AddWithValue("category", category);
-        }
+        AddFilterParameters(command, category, startDate, endDate);
 
         await using var reader = await command.ExecuteReaderAsync();
 
@@ -143,7 +154,10 @@ public class TransactionService
         return results;
     }
 
-    public async Task<List<CategorySummaryDto>> GetCategorySummariesAsync()
+    public async Task<List<CategorySummaryDto>> GetCategorySummariesAsync(
+        string? category = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null)
     {
         var results = new List<CategorySummaryDto>();
 
@@ -158,11 +172,24 @@ public class TransactionService
                 COALESCE(SUM(amount), 0) AS net_balance,
                 COUNT(*) AS transaction_count
             FROM transactions
+            """;
+
+        var conditions = BuildFilterConditions(category, startDate, endDate);
+
+        if (conditions.Count > 0)
+        {
+            query += $" WHERE {string.Join(" AND ", conditions)}";
+        }
+
+        query += """
+            
             GROUP BY COALESCE(NULLIF(category, ''), 'Uncategorized')
             ORDER BY category;
             """;
 
         await using var command = new NpgsqlCommand(query, connection);
+        AddFilterParameters(command, category, startDate, endDate);
+
         await using var reader = await command.ExecuteReaderAsync();
 
         while (await reader.ReadAsync())
@@ -180,7 +207,10 @@ public class TransactionService
         return results;
     }
 
-    public async Task<List<TransactionTrendDto>> GetTransactionTrendsAsync()
+    public async Task<List<TransactionTrendDto>> GetTransactionTrendsAsync(
+        string? category = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null)
     {
         var results = new List<TransactionTrendDto>();
 
@@ -194,11 +224,24 @@ public class TransactionService
                 COALESCE(SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END), 0) AS expense,
                 COALESCE(SUM(amount), 0) AS net_balance
             FROM transactions
+            """;
+
+        var conditions = BuildFilterConditions(category, startDate, endDate);
+
+        if (conditions.Count > 0)
+        {
+            query += $" WHERE {string.Join(" AND ", conditions)}";
+        }
+
+        query += """
+            
             GROUP BY transaction_date
             ORDER BY transaction_date;
             """;
 
         await using var command = new NpgsqlCommand(query, connection);
+        AddFilterParameters(command, category, startDate, endDate);
+
         await using var reader = await command.ExecuteReaderAsync();
 
         while (await reader.ReadAsync())
@@ -215,4 +258,50 @@ public class TransactionService
         return results;
     }
 
+    private static List<string> BuildFilterConditions(
+        string? category,
+        DateTime? startDate,
+        DateTime? endDate)
+    {
+        var conditions = new List<string>();
+
+        if (!string.IsNullOrWhiteSpace(category))
+        {
+            conditions.Add("category = @category");
+        }
+
+        if (startDate.HasValue)
+        {
+            conditions.Add("transaction_date >= @startDate");
+        }
+
+        if (endDate.HasValue)
+        {
+            conditions.Add("transaction_date <= @endDate");
+        }
+
+        return conditions;
+    }
+
+    private static void AddFilterParameters(
+        NpgsqlCommand command,
+        string? category,
+        DateTime? startDate,
+        DateTime? endDate)
+    {
+        if (!string.IsNullOrWhiteSpace(category))
+        {
+            command.Parameters.AddWithValue("category", category);
+        }
+
+        if (startDate.HasValue)
+        {
+            command.Parameters.AddWithValue("startDate", startDate.Value.Date);
+        }
+
+        if (endDate.HasValue)
+        {
+            command.Parameters.AddWithValue("endDate", endDate.Value.Date);
+        }
+    }
 }

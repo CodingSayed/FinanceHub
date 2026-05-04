@@ -197,3 +197,36 @@ This prepares the UI layer for:
 - additional filters (e.g. date range)
 - more complex dashboards
 - extended analytical views
+
+## Implemented in Sprint 4
+
+The API and UI layers now support date-based filtering.
+
+### API Enhancements
+
+The API now supports filtering transactions and summaries by date range:
+
+- filter transactions by date range:
+  - GET /api/transactions?startDate=2024-01-01&endDate=2024-01-10
+- filter financial summary by date range:
+  - GET /api/transactions/summary?startDate=2024-01-01&endDate=2024-01-10
+
+Date filtering is implemented in the TransactionService using SQL WHERE clauses.
+
+### UI Enhancements
+
+The Razor Pages UI now supports:
+
+- date range filtering via query parameters
+- filtered transactions based on selected date range
+- filtered summary metrics
+- charts that respond dynamically to date filters
+
+### Architectural Impact
+
+The system now supports multi-dimensional filtering:
+
+- category-based filtering (Sprint 3.2)
+- time-based filtering (Sprint 4)
+
+This enables more advanced analytical exploration and prepares the system for dashboard-style use cases.

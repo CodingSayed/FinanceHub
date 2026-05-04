@@ -158,3 +158,29 @@ The data flow now supports a structured dashboard presentation layer.
 ### Result
 
 The UI now presents data in a structured dashboard format, allowing users to quickly interpret financial insights without scanning raw tables.
+
+## Implemented in Sprint 4
+
+The data flow now supports time-based filtering.
+
+### Extended Flow
+
+1. Transactions are stored with a transaction_date.
+2. The API applies date filters using:
+   - startDate
+   - endDate
+3. Filter logic is applied at query level in PostgreSQL.
+4. The UI sends selected date filters via query parameters.
+5. The API returns filtered datasets.
+6. The UI renders:
+   - filtered transaction list
+   - filtered summaries
+   - filtered charts
+
+### Result
+
+Users can now analyze financial data within specific time windows, enabling:
+
+- period-based analysis
+- short-term vs long-term comparisons
+- more meaningful trend insights

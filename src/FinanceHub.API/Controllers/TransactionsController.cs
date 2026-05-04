@@ -15,16 +15,22 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] string? category = null)
+    public async Task<IActionResult> Get(
+        [FromQuery] string? category = null,
+        [FromQuery] DateTime? startDate = null,
+        [FromQuery] DateTime? endDate = null)
     {
-        var transactions = await _transactionService.GetTransactionsAsync(category);
+        var transactions = await _transactionService.GetTransactionsAsync(category, startDate, endDate);
         return Ok(transactions);
     }
 
     [HttpGet("summary")]
-    public async Task<IActionResult> GetSummary([FromQuery] string? category = null)
+    public async Task<IActionResult> GetSummary(
+        [FromQuery] string? category = null,
+        [FromQuery] DateTime? startDate = null,
+        [FromQuery] DateTime? endDate = null)
     {
-        var summary = await _transactionService.GetSummaryAsync(category);
+        var summary = await _transactionService.GetSummaryAsync(category, startDate, endDate);
         return Ok(summary);
     }
 
@@ -36,16 +42,22 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpGet("categories/summary")]
-    public async Task<IActionResult> GetCategorySummaries()
+    public async Task<IActionResult> GetCategorySummaries(
+        [FromQuery] string? category = null,
+        [FromQuery] DateTime? startDate = null,
+        [FromQuery] DateTime? endDate = null)
     {
-        var summaries = await _transactionService.GetCategorySummariesAsync();
+        var summaries = await _transactionService.GetCategorySummariesAsync(category, startDate, endDate);
         return Ok(summaries);
     }
 
     [HttpGet("trends")]
-    public async Task<IActionResult> GetTrends()
+    public async Task<IActionResult> GetTrends(
+        [FromQuery] string? category = null,
+        [FromQuery] DateTime? startDate = null,
+        [FromQuery] DateTime? endDate = null)
     {
-        var trends = await _transactionService.GetTransactionTrendsAsync();
+        var trends = await _transactionService.GetTransactionTrendsAsync(category, startDate, endDate);
         return Ok(trends);
     }
 }

@@ -27,7 +27,7 @@ FinanceHub is a hybrid .NET + Python personal finance analytics platform.
 
 ## Status
 
-Active development — Sprint 4 (Dashboard UX) in progress
+Active development — Sprint 4 completed
 
 Current capabilities include:
 
@@ -38,6 +38,7 @@ Current capabilities include:
 - category-based analytics
 - visual analytics with charts
 - realistic dataset ingestion with data quality handling
+- date-based filtering for transactions and analytics
 
 ## Features
 

@@ -241,3 +241,38 @@ Sprint 4 introduces a dashboard-style layout using grid-based UI composition.
 
 - additional CSS complexity
 - tighter coupling between layout and data presentation
+
+## Why implement date filtering in the API layer?
+
+### Context
+
+After introducing category filtering and trend analytics, the next step was enabling time-based filtering.
+
+A decision was required on where to apply filtering:
+
+- UI layer (client-side filtering)
+- API layer (database query filtering)
+
+### Decision
+
+Date filtering is implemented in the API layer using SQL WHERE clauses.
+
+### Rationale
+
+- filtering at the database level is more efficient
+- avoids transferring unnecessary data to the UI
+- keeps the UI lightweight
+- ensures consistent filtering logic across endpoints
+
+### Consequences
+
+Positive:
+
+- efficient queries
+- scalable filtering approach
+- clean separation of concerns
+
+Negative:
+
+- increased responsibility in TransactionService
+- potential need for query abstraction in the future
