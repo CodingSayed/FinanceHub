@@ -18,9 +18,17 @@ public class TransactionsController : ControllerBase
     public async Task<IActionResult> Get(
         [FromQuery] string? category = null,
         [FromQuery] DateTime? startDate = null,
-        [FromQuery] DateTime? endDate = null)
+        [FromQuery] DateTime? endDate = null,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10)
     {
-        var transactions = await _transactionService.GetTransactionsAsync(category, startDate, endDate);
+        var transactions = await _transactionService.GetTransactionsAsync(
+            category,
+            startDate,
+            endDate,
+            page,
+            pageSize);
+
         return Ok(transactions);
     }
 

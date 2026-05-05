@@ -230,3 +230,42 @@ The system now supports multi-dimensional filtering:
 - time-based filtering (Sprint 4)
 
 This enables more advanced analytical exploration and prepares the system for dashboard-style use cases.
+
+## Implemented in Sprint 4.1
+
+The API and UI layers now support advanced data filtering and pagination.
+
+### API Enhancements
+
+The API now supports:
+
+- date range filtering:
+  - `GET /api/transactions?startDate=2024-01-01&endDate=2024-01-31`
+- pagination:
+  - `GET /api/transactions?page=1&pageSize=10`
+
+Filtering parameters can be combined:
+
+- category + date range + pagination
+
+All filtering and pagination logic is implemented in the `TransactionService` using SQL.
+
+### UI Enhancements
+
+The Razor Pages UI now supports:
+
+- date range filtering via input fields
+- combined filters (category + date range)
+- pagination controls (Previous / Next)
+- persistent filters across page navigation
+
+### Architectural Impact
+
+This extends the system from static analytics to interactive data exploration.
+
+The API now supports:
+
+- filtered queries
+- paginated data access
+
+The UI now behaves more like a real dashboard application.

@@ -184,3 +184,28 @@ Users can now analyze financial data within specific time windows, enabling:
 - period-based analysis
 - short-term vs long-term comparisons
 - more meaningful trend insights
+
+## Implemented in Sprint 4.1
+
+The data flow now includes filtered and paginated data retrieval.
+
+### Extended Flow
+
+1. Transactions are stored in PostgreSQL.
+2. The API applies:
+   - category filters
+   - date range filters
+   - pagination
+3. The API returns a subset of data based on filters.
+4. The UI:
+   - sends filter parameters via query string
+   - preserves filters during pagination
+   - updates the view dynamically
+
+### Result
+
+Users can now:
+
+- explore transactions within specific date ranges
+- navigate large datasets using pagination
+- combine multiple filters for precise analysis

@@ -276,3 +276,40 @@ Negative:
 
 - increased responsibility in TransactionService
 - potential need for query abstraction in the future
+
+## Why implement filtering and pagination in the API layer?
+
+### Context
+
+As the dataset grows, returning all transactions becomes inefficient and limits usability.
+
+A decision was needed on where to implement:
+
+- filtering logic
+- pagination logic
+
+### Decision
+
+Filtering and pagination are implemented in the API service layer using SQL.
+
+### Rationale
+
+- reduces data transfer to the UI
+- improves performance for larger datasets
+- keeps the UI simple
+- aligns with separation of concerns:
+  - API = data access and shaping
+  - UI = presentation
+
+### Consequences
+
+**Positive:**
+
+- scalable data access
+- efficient queries
+- better user experience
+
+**Negative:**
+
+- increased complexity in service layer
+- requires careful parameter validation (future improvement)

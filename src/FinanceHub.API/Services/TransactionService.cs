@@ -15,7 +15,9 @@ public class TransactionService
     public async Task<List<TransactionDto>> GetTransactionsAsync(
         string? category = null,
         DateTime? startDate = null,
-        DateTime? endDate = null)
+        DateTime? endDate = null,
+        int page = 1,
+        int pageSize = 10)
     {
         var results = new List<TransactionDto>();
 
@@ -25,37 +27,47 @@ public class TransactionService
         var query = """
             SELECT id, transaction_date, description, amount, currency, source, category
             FROM transactions
+            WHERE 1=1
             """;
-
-        var conditions = new List<string>();
 
         if (!string.IsNullOrWhiteSpace(category))
         {
-            conditions.Add("category = @category");
+            query += " AND category = @category";
         }
 
         if (startDate.HasValue)
         {
-            conditions.Add("transaction_date >= @startDate");
+            query += " AND transaction_date >= @startDate";
         }
 
         if (endDate.HasValue)
         {
-            conditions.Add("transaction_date <= @endDate");
+            query += " AND transaction_date <= @endDate";
         }
 
-        if (conditions.Count > 0)
-        {
-            query += $" WHERE {string.Join(" AND ", conditions)}";
-        }
-
-        query += """
-            
-            ORDER BY transaction_date DESC, id DESC;
-            """;
+       query += " ORDER BY transaction_date DESC, id DESC LIMIT @pageSize OFFSET @offset;";
 
         await using var command = new NpgsqlCommand(query, connection);
-        AddFilterParameters(command, category, startDate, endDate);
+
+        if (!string.IsNullOrWhiteSpace(category))
+        {
+            command.Parameters.AddWithValue("category", category);
+        }
+
+        if (startDate.HasValue)
+        {
+            command.Parameters.AddWithValue("startDate", startDate.Value.Date);
+        }
+
+        if (endDate.HasValue)
+        {
+            command.Parameters.AddWithValue("endDate", endDate.Value.Date);
+        }
+
+        var offset = (page - 1) * pageSize;
+
+        command.Parameters.AddWithValue("pageSize", pageSize);
+        command.Parameters.AddWithValue("offset", offset);
 
         await using var reader = await command.ExecuteReaderAsync();
 
